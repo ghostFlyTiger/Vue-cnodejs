@@ -19,7 +19,7 @@
                     <img class="head" :src="item.author.avatar_url" />
                     <div class="info">
                         <span class="cl">
-                            <span class="name">{{item.author.loginname}}</span>
+                            <span class="name">{{item.author.userName}}</span>
                             <span class="name" v-if="item.type==='at'">在回复中@了您</span>
                             <span class="name" v-if="item.type==='reply'">回复了您的话题</span>
                         </span>

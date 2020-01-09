@@ -50,7 +50,7 @@ const routers = [{
     },
     meta: { requiresAuth: true }
 }, {
-    path: '/user/:loginname',
+    path: '/user/:userName',
     name: 'user',
     component(resolve) {
         require.ensure(['./views/user.vue'], () => {

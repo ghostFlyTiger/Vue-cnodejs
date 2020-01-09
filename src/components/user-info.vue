@@ -1,14 +1,14 @@
 <template>
     <div class="user-info">
         <!-- 未登录 -->
-        <ul class="login-no" v-if="!userInfo.loginname">
+        <ul class="login-no" v-if="!userInfo.userName">
             <li class="login" @click="goEnter"><a >登录</a></li>
         </ul>
         <!-- 已登录 -->
-        <div class="login-yes" v-if="userInfo.loginname" @click="goUser">
+        <div class="login-yes" v-if="userInfo.userName" @click="goUser">
             <div class="avertar"><img v-if="userInfo.avatar_url" :src="userInfo.avatar_url"></div>
             <div class="info">
-                <p v-if="userInfo.loginname" v-text="userInfo.loginname"></p>
+                <p v-if="userInfo.userName" v-text="userInfo.userName"></p>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
                 this.$router.push({
                     name: 'user',
                     params: {
-                        loginname: this.userInfo.loginname
+                        userName: this.userInfo.userName
                     }
                 });
             }

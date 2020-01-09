@@ -6,11 +6,11 @@ Vue.use(Vuex);
 const userStore = new Vuex.Store({
     state: {
         userInfo: {
-            loginname: 'Admin',
+            userName: 'Admin',
             userId: 1e3
         },
         loading: {
-            show: true,
+            show: true, // loading 显示状态值
             showText: 'loading....'
         },
         urls: {
@@ -20,9 +20,14 @@ const userStore = new Vuex.Store({
             v: {
                 share: '分享',
                 ask: '问答',
-                tip: '提示',
+                tip: '小知识',
                 good: '精华',
                 all: '全部'
+            },
+            t: {
+                share: '分享',
+                ask: '问答',
+                tip: '小知识'
             },
             str(tab = 'all') {
                 return this.v[tab] || '全部';
@@ -32,6 +37,9 @@ const userStore = new Vuex.Store({
     getters: {
         getUserInfo(state) {
             return state.userInfo;
+        },
+        getTabs(state) {
+            return state.tabs;
         }
     },
     mutations: {

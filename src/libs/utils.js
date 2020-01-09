@@ -156,7 +156,7 @@ exports.getTabInfo = (tab, good, top, isClass) => {
                 className = 'ask';
                 break;
             case 'tip':
-                str = '杂选';
+                str = '小知识';
                 className = 'job';
                 break;
             default:
@@ -200,3 +200,28 @@ exports.fetchUsers = fetchUsers;
 exports.getCheck = getCheck;
 exports.fmtDate = fmtDate;
 exports.MillisecondToDate = MillisecondToDate;
+
+/**
+ * sessionStorage管理小工具
+ * */
+let StorageManage = {
+    store: window.window.sessionStorage,
+    push(name, value) {
+        this.store[name] = value;
+    },
+    jsonPush(name, value) {
+        this.store[name] = JSON.stringify(value);
+    },
+    get(name) {
+        return this.store[name];
+    },
+    getJson(name) {
+        return JSON.parse(this.get(name));
+    },
+    remove(name) {
+        this.store.removeItem(name);
+    }
+
+};
+
+exports.storageManage = StorageManage;

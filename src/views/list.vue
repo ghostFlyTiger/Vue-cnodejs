@@ -16,21 +16,21 @@
                             :class="getTabInfo(item.tab, item.good, item.top, true)"
                             :title="getTabInfo(item.tab, item.good, item.top, false)">
                     </h3>
-                    <div class="content" v-show="item.author">
-                        <img class="avatar" :src="item.author.avatar_url" />
+                    <div class="content" v-show="item.topicAuthor">
+                        <img class="avatar" :src="item.topicAuthor.avatarUrl" />
                         <div class="info">
                             <p>
                                 <span class="name">
-                                    {{item.author.loginname}}
+                                    {{item.topicAuthor.userName}}
                                 </span>
-                                <span class="status" v-if="item.reply_count > 0">
-                                    <b>{{item.reply_count}}</b>
-                                    /{{item.visit_count}}
+                                <span class="status" v-if="item.replyCount > 0">
+                                    <b>{{item.replyCount}}</b>
+                                    /{{item.visitCount}}
                                 </span>
                             </p>
                             <p>
-                                <time>{{item.create_at | getLastTimeStr(true)}}</time>
-                                <time>{{item.last_reply_at | getLastTimeStr(true)}}</time>
+                                <time>{{item.createAt | getLastTimeStr(true)}}</time>
+                                <time>{{item.lastReplyAt | getLastTimeStr(true)}}</time>
                             </p>
                         </div>
                     </div>
@@ -75,10 +75,10 @@
 
             // 如果从详情返回并且之前存有对应的查询条件和参数
             // 则直接渲染之前的数据
-            if (window.window.sessionStorage.searchKey && window.window.sessionStorage.tab === this.searchKey.tab) {
-                this.topics = JSON.parse(window.window.sessionStorage.topics);
-                this.searchKey = JSON.parse(window.window.sessionStorage.searchKey);
-                this.$nextTick(() => $(window).scrollTop(window.window.sessionStorage.scrollTop));
+            if (utils.storageManage.get("searchKey") && utils.storageManage.get("tab") === this.searchKey.tab) {
+                this.topics = utils.storageManage.getJson("topics");
+                this.searchKey = utils.storageManage.getJson("searchKey");
+                this.$nextTick(() => $(window).scrollTop(utils.storageManage.get("scrollTop")));
             } else {
                 this.getTopics();
             }
@@ -90,13 +90,13 @@
             // 方便从详情页面返回到该页面的时候继续加载之前位置的数据
             if (to.name === 'topic') {
                 // 当前滚动条位置
-                window.window.sessionStorage.scrollTop = $(window).scrollTop();
+                utils.storageManage.push("scrollTop", $(window).scrollTop());
                 // 当前页面主题数据
-                window.window.sessionStorage.topics = JSON.stringify(this.topics);
+                utils.storageManage.jsonPush("topics", this.topics);
                 // 查询参数
-                window.window.sessionStorage.searchKey = JSON.stringify(this.searchKey);
+                utils.storageManage.jsonPush("searchKey", this.searchKey);
                 // 当前tab
-                window.window.sessionStorage.tab = from.query.tab || 'all';
+                utils.storageManage.push("tab", from.query.tab || 'all');
             }
             $(window).off('scroll');
             next();
@@ -104,10 +104,10 @@
         beforeRouteEnter(to, from, next) {
             if (from.name !== 'topic') {
                 // 页面切换移除之前记录的数据集
-                if (window.window.sessionStorage.tab) {
-                    window.window.sessionStorage.removeItem('topics');
-                    window.window.sessionStorage.removeItem('searchKey');
-                    window.window.sessionStorage.removeItem('tab');
+                if (utils.storageManage.get("tab")) {
+                    utils.storageManage.remove('topics');
+                    utils.storageManage.remove('searchKey');
+                    utils.storageManage.remove('tab');
                 }
             }
             next();

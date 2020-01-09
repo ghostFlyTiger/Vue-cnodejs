@@ -3,7 +3,7 @@
         <nv-head page-type="用户信息" :fix-head="true" :show-menu="false" :need-add="true" ></nv-head>
         <section class="userinfo">
             <img class="u-img" :src="user.avatar_url" /><br/>
-            <span class="u-name" v-text="user.loginname"></span>
+            <span class="u-name" v-text="user.userName"></span>
             <div class="u-bottom">
                 <span class="u-time" v-text="getLastTimeStr(user.create_at, false)"></span>
                 <span class="u-score">积分：{{user.score}}</span>
@@ -16,13 +16,13 @@
             </ul>
             <div class="message" v-for="item in currentData">
                 <section class="user">
-                    <router-link class="head" :to="{name:'user',params:{loginname:item.author.loginname}}">
-                        <img :src="item.author.avatar_url" />
+                    <router-link class="head" :to="{name:'user',params:{userName:item.author.userName}}">
+                        <img :src="item.topicAuthor.avatarUrl" />
                     </router-link>
                     <router-link class="info" :to="{name:'topic',params:{id:item.id}}">
                         <div class="t-title">{{item.title}}</div>
                         <span class="cl mt12">
-                            <span class="name">{{item.author.loginname}}</span>
+                            <span class="name">{{item.topicAuthor.userName}}</span>
                         </span>
                         <span class="cr mt12">
                             <span class="name" v-text="getLastTimeStr(item.last_reply_at, true)"></span>
@@ -63,15 +63,15 @@
                 return utils.getLastTimeStr(date, friendly);
             },
             getUser() {
-                let loginname = this.$route.params.loginname;
-                if (!loginname) {
+                let userName = this.$route.params.userName;
+                if (!userName) {
                     this.$alert('缺少用户名参数');
                     this.$router.push({
                         path: '/'
                     });
                     return false;
                 }
-                $.get('https://cnodejs.org/api/v1/user/' + loginname, (d) => {
+                $.get('https://cnodejs.org/api/v1/user/' + userName, (d) => {
                     if (d && d.data) {
                         let data = d.data;
                         this.user = data;

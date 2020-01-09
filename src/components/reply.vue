@@ -66,7 +66,7 @@
                                 this.topic.replies.push({
                                     id: res.reply_id,
                                     author: {
-                                        loginname: this.userInfo.loginname,
+                                        userName: this.userInfo.userName,
                                         avatarUrl: this.userInfo.avatarUrl
                                     },
                                     content: replyContent,

@@ -12,9 +12,9 @@
 
             <h2 class="topic-title" v-text="topic.title"></h2>
             <section class="author-info">
-                <img class="avatar" :src="topic.author.avatarUrl" />
+                <img class="avatar" :src="topic.topicAuthor.avatarUrl" />
                 <div class="col">
-                    <span>{{topic.author.loginname}}</span>
+                    <span>{{topic.topicAuthor.userName}}</span>
                     <time>
                         发布于:{{topic.createAt | getLastTimeStr(true)}}
                     </time>
@@ -37,12 +37,12 @@
                 <ul>
                     <li v-for="item in topic.replies">
                         <section class="user">
-                            <router-link :to="{name:'user',params:{loginname:item.author.loginname}}" >
-                                <img class="head" :src="item.author.avatar_url"/>
+                            <router-link :to="{name:'user',params:{userName:item.topicAuthor.userName}}" >
+                                <img class="head" :src="item.topicAuthor.avatarUrl"/>
                             </router-link>
                             <div class="info">
                                 <span class="cl">
-                                    <span class="name" v-text="item.author.loginname"></span>
+                                    <span class="name" v-text="item.topicAuthor.userName"></span>
                                     <span class="name mt10">
                                         <span></span>
                                         发布于:{{item.createAt | getLastTimeStr(true)}}</span>
@@ -64,7 +64,7 @@
                         <nv-reply :topic.sync="topic"
                                 :topic-id="topicId"
                                 :reply-id="item.id"
-                                :reply-to="item.author.loginname"
+                                :reply-to="item.author.userName"
                                 :show.sync="curReplyId"
                                 @close="hideItemReply"
                                 v-if="userInfo.userId && curReplyId === item.id"></nv-reply>
@@ -126,7 +126,7 @@
             }, (d) => {
                 if (d && d.data) {
                     this.topic = d.data;
-                    this.topic.author = d.data.author || {};
+                    this.topic.topicAuthor = d.data.topicAuthor || {};
                 } else {
                     this.noData = true;
                 }

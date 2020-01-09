@@ -1,20 +1,18 @@
 <template>
     <div>
-        <nv-head page-type="主题"
+        <nv-head page-type="主题发布"
             :show-menu="false"
             :fix-head="true"></nv-head>
         <div class="add-container">
             <div class="line">选择分类：
                 <select class="add-tab" v-model="topic.tab">
-                    <option value="share">分享</option>
-                    <option value="ask">问答</option>
-                    <option value="job">招聘</option>
+                    <option v-for="(val,key) in topicTabs.t" :value="key" v-text="val"></option>
                 </select>
                 <a class="add-btn" @click="addTopic">发布</a>
             </div>
             <div class="line">
                 <input class="add-title" v-model="topic.title"
-                        type="text" :class="{'err':err=='title'}"
+                        type="text" :class="{'err':err==='title'}"
                         placeholder="标题，字数10字以上" max-length="100"/>
             </div>
             <h5editor style="height:580px;" :class="{'err':err==='content'}" placeholder="请输入内容" :value="mdValue"></h5editor>
@@ -45,15 +43,19 @@
                 mdValue: {}
             };
         },
+        mounted() {
+            console.info(this.topicTabs);
+        },
         computed: {
             ...mapGetters({
-                userInfo: 'getUserInfo'
+                userInfo: 'getUserInfo',
+                topicTabs: 'getTabs'
             })
         },
         methods: {
             addTopic() {
                 let title = $.trim(this.topic.title);
-                if (!title || title.length < 10) {
+                if (!title || title.length < 5) {
                     this.err = 'title';
                     return false;
                 }

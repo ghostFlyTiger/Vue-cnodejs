@@ -38,7 +38,7 @@
                     dataType: 'json',
                     success: (res) => {
                         let user = {
-                            loginname: res.loginname,
+                            userName: res.userName,
                             avatar_url: res.avatar_url,
                             userId: res.id,
                             token: this.token
