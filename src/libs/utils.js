@@ -155,8 +155,8 @@ exports.getTabInfo = (tab, good, top, isClass) => {
                 str = '问答';
                 className = 'ask';
                 break;
-            case 'job':
-                str = '招聘';
+            case 'tip':
+                str = '杂选';
                 className = 'job';
                 break;
             default:

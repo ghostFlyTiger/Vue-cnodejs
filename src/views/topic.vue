@@ -12,11 +12,11 @@
 
             <h2 class="topic-title" v-text="topic.title"></h2>
             <section class="author-info">
-                <img class="avatar" :src="topic.author.avatar_url" />
+                <img class="avatar" :src="topic.author.avatarUrl" />
                 <div class="col">
                     <span>{{topic.author.loginname}}</span>
                     <time>
-                        发布于:{{topic.create_at | getLastTimeStr(true)}}
+                        发布于:{{topic.createAt | getLastTimeStr(true)}}
                     </time>
                 </div>
                 <div class="right">
@@ -24,16 +24,13 @@
                             :class="getTabInfo(topic.tab, topic.good, topic.top, true)"
                             v-text="getTabInfo(topic.tab, topic.good, topic.top, false)">
                     </span>
-                    <span class="name">{{topic.visit_count}}次浏览</span>
+                    <span class="name">{{topic.visitCount}}次浏览</span>
                 </div>
             </section>
 
-            <section class='markdown-body topic-content' v-html="topic.content">
-
-            </section>
-
+            <h5editor style="height:580px;"  :view="true" :content="topic.content"></h5editor>
             <h3 class="topic-reply">
-                <strong>{{topic.reply_count}}</strong> 回复
+                <strong>{{topic.replyCount}}</strong> 回复
             </h3>
 
             <section class="reply-list">
@@ -48,7 +45,7 @@
                                     <span class="name" v-text="item.author.loginname"></span>
                                     <span class="name mt10">
                                         <span></span>
-                                        发布于:{{item.create_at | getLastTimeStr(true)}}</span>
+                                        发布于:{{item.createAt | getLastTimeStr(true)}}</span>
                                 </span>
                                 <span class="cr">
                                     <span class="iconfont icon"
@@ -59,7 +56,11 @@
                                 </span>
                             </div>
                         </section>
-                        <div class="reply_content" v-html="item.content"></div>
+
+<!--                        <div class="reply_content" v-html="item.content"></div>-->
+
+                        <h5editor :view="true" :content.onece="item.content"></h5editor>
+
                         <nv-reply :topic.sync="topic"
                                 :topic-id="topicId"
                                 :reply-id="item.id"
@@ -93,6 +94,8 @@
         mapGetters
     } from 'vuex';
 
+    import h5editor from '../components/h5editor.vue';
+
     export default {
         data() {
             return {
@@ -113,12 +116,17 @@
             this.showMenu = false;
 
             // 获取url传的tab参数
-            this.topicId = this.$route.params.id;
+            var topicId = this.topicId = this.$route.params.id;
+
+            console.info(this.$store.state);
 
             // 加载主题数据
-            $.get('https://cnodejs.org/api/v1/topic/' + this.topicId, (d) => {
+            $.post(this.$store.state.urls.parent + 'topic/get', {
+                id: topicId
+            }, (d) => {
                 if (d && d.data) {
                     this.topic = d.data;
+                    this.topic.author = d.data.author || {};
                 } else {
                     this.noData = true;
                 }
@@ -186,7 +194,8 @@
         components: {
             nvHead,
             nvReply,
-            nvTop
+            nvTop,
+            h5editor
         }
     };
 </script>

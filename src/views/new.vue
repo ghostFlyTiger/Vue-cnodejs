@@ -17,10 +17,7 @@
                         type="text" :class="{'err':err=='title'}"
                         placeholder="标题，字数10字以上" max-length="100"/>
             </div>
-            <textarea v-model="topic.content" rows="35" class="add-content"
-                :class="{'err':err=='content'}"
-                placeholder='回复支持Markdown语法,请注意标记代码'>
-            </textarea>
+            <h5editor style="height:580px;" :class="{'err':err==='content'}" placeholder="请输入内容" :value="mdValue"></h5editor>
         </div>
     </div>
 </template>
@@ -28,6 +25,9 @@
 <script>
     import $ from 'webpack-zepto';
     import nvHead from '../components/header.vue';
+
+    import h5editor from '../components/h5editor.vue';
+
     import {
         mapGetters
     } from 'vuex';
@@ -41,7 +41,8 @@
                     content: ''
                 },
                 err: '',
-                authorTxt: '<br/><br/><a class="from" href="https://github.com/shinygang/Vue-cnodejs">I‘m webapp-cnodejs-vue</a>'
+                authorTxt: ' \n-- # *I‘m Chivenh*',
+                mdValue: {}
             };
         },
         computed: {
@@ -51,28 +52,31 @@
         },
         methods: {
             addTopic() {
-                console.log(this.userInfo);
                 let title = $.trim(this.topic.title);
-                let contents = $.trim(this.topic.content);
-
                 if (!title || title.length < 10) {
                     this.err = 'title';
                     return false;
                 }
+
+                let contents = $.trim(this.mdValue.value);
+
                 if (!contents) {
                     this.err = 'content';
                     return false;
                 }
+                this.topic.content = contents;
 
                 let postData = {
                     ...this.topic,
-                    content: this.topic.content + this.authorTxt,
-                    accesstoken: this.userInfo.token
+                    topicAuthor: this.userInfo,
+                    content: this.topic.content + this.authorTxt
                 };
+
                 $.ajax({
                     type: 'POST',
-                    url: 'https://cnodejs.org/api/v1/topics',
-                    data: postData,
+                    contentType: 'application/json;charset=UTF-8',
+                    url: this.$store.state.urls.parent + 'topic/add',
+                    data: JSON.stringify(postData),
                     dataType: 'json',
                     success: (res) => {
                         if (res.success) {
@@ -90,13 +94,15 @@
             }
         },
         components: {
-            nvHead
+            nvHead,
+            h5editor
         }
     };
 </script>
 
 <style lang="scss">
     .add-container {
+        box-sizing: border-box;
         margin-top: 50px;
         background-color: #fff;
         .line {

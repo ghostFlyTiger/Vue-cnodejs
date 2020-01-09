@@ -1,11 +1,7 @@
 <template>
 
     <section class="reply">
-        <textarea id="content" rows="8" class="text"
-            :class="{'err':hasErr}"
-            v-model="content"
-            placeholder='回复支持Markdown语法,请注意标记代码'>
-        </textarea>
+        <h5editor :class="{'err':hasErr}" placeholder="请输入回复内容" :value="replyValue"></h5editor>
         <a class="button" @click="addReply">确定</a>
     </section>
 
@@ -18,14 +14,17 @@
         mapGetters
     } from 'vuex';
 
+    import h5editor from '../components/h5editor.vue';
+
     export default {
+        components: { h5editor },
         replace: true,
         props: ['topic', 'replyId', 'topicId', 'replyTo', 'show'],
         data() {
             return {
                 hasErr: false,
-                content: '',
-                author_txt: '<br/><br/><a class="form" href="https://github.com/shinygang/Vue-cnodejs">I‘m webapp-cnodejs-vue</a>'
+                authorTxt: ' # *I‘m Chivenh*',
+                replyValue: {}
             };
         },
         computed: {
@@ -40,9 +39,11 @@
         },
         methods: {
             addReply() {
-                if (!this.content) {
+                let content = this.replyValue.value;
+                if (!content) {
                     this.hasErr = true;
                 } else {
+                    this.content = content;
                     let time = new Date();
                     let linkUsers = utils.linkUsers(this.content);
                     let htmlText = markdown.toHTML(linkUsers) + this.author_txt;
@@ -66,11 +67,11 @@
                                     id: res.reply_id,
                                     author: {
                                         loginname: this.userInfo.loginname,
-                                        avatar_url: this.userInfo.avatar_url
+                                        avatarUrl: this.userInfo.avatarUrl
                                     },
                                     content: replyContent,
                                     ups: [],
-                                    create_at: time
+                                    createAt: time
                                 });
                             }
                             this.content = '';

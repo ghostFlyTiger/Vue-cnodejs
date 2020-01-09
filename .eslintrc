@@ -17,6 +17,7 @@
         "eol-last": 0,
         "semi": ["error", "always"],
         "space-before-function-paren": 0,
-        "no-useless-escape": 0
+        "no-useless-escape": 0,
+      "quotes": "off"
     }
 }

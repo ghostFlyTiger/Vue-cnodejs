@@ -1,11 +1,15 @@
+/* eslint-disable */
+
 import Vue from 'vue';
 import $ from 'webpack-zepto';
 import VueRouter from 'vue-router';
 import filters from './filters';
-import routes from './routers';
+import routes from './topicRouter';
+// import routes from './routers';
 import Alert from './libs/alert';
 import store from './vuex/user';
 import FastClick from 'fastclick';
+
 Vue.use(VueRouter);
 Vue.use(Alert);
 
@@ -31,6 +35,7 @@ router.beforeEach((to, from, next) => {
     // 处理左侧滚动不影响右边
     // $('html, body, #page').removeClass('scroll-hide');
     $('body').css('overflow', 'auto');
+    /*
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.state.userInfo.userId) {
             next();
@@ -42,7 +47,13 @@ router.beforeEach((to, from, next) => {
         }
     } else {
         next();
-    }
+    }*/
+    store.state.loading.show = true;
+    next();
+});
+
+router.afterEach(() => {
+    store.state.loading.show = false;
 });
 
 new Vue({

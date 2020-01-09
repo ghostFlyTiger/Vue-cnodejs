@@ -1,5 +1,6 @@
 <template>
     <div>
+        <loading show-txt="加载中....." :show="$store.state.loading.show"></loading>
         <div class="page-cover" v-if="show&&fixHead" @click="showMenus">
         </div>
         <header :class="{'show':show&&fixHead,'fix-header':fixHead,'no-fix':!fixHead}" id="hd">
@@ -19,6 +20,8 @@
 
 <script>
 import $ from 'webpack-zepto';
+
+import loading from '../components/loading.vue';
 
 export default {
     replace: true,
@@ -52,7 +55,8 @@ export default {
         }
     },
     components: {
-        'nvMenu': require('./menu.vue')
+        'nvMenu': require('./menu.vue'),
+        loading
     }
 };
 </script>

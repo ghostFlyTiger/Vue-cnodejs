@@ -16,7 +16,7 @@
                             :class="getTabInfo(item.tab, item.good, item.top, true)"
                             :title="getTabInfo(item.tab, item.good, item.top, false)">
                     </h3>
-                    <div class="content">
+                    <div class="content" v-show="item.author">
                         <img class="avatar" :src="item.author.avatar_url" />
                         <div class="info">
                             <p>
@@ -115,25 +115,7 @@
         methods: {
             // 获取title文字
             getTitleStr(tab) {
-                let str = '';
-                switch (tab) {
-                    case 'share':
-                        str = '分享';
-                        break;
-                    case 'ask':
-                        str = '问答';
-                        break;
-                    case 'job':
-                        str = '招聘';
-                        break;
-                    case 'good':
-                        str = '精华';
-                        break;
-                    default:
-                        str = '全部';
-                        break;
-                }
-                return str;
+                return this.$store.state.tabs.str(tab);
             },
             // 获取不同tab的样式或者标题
             getTabInfo(tab, good, top, isClass) {
@@ -142,7 +124,7 @@
             // 获取主题数据
             getTopics() {
                 let params = $.param(this.searchKey);
-                $.get('https://cnodejs.org/api/v1/topics?' + params, (d) => {
+                $.post(this.$store.state.urls.parent + 'topic/getAllByTabInPg?' + params, (d) => {
                     this.scroll = true;
                     if (d && d.data) {
                         d.data.forEach(this.mergeTopics);
@@ -150,6 +132,7 @@
                 });
             },
             mergeTopics(topic) {
+                topic.author = topic.author || {};
                 if (typeof this.index[topic.id] === 'number') {
                     const topicsIndex = this.index[topic.id];
                     this.topics[topicsIndex] = topic;
