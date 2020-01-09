@@ -1,17 +1,11 @@
-#基于vue.js重写Cnodejs.org社区的webapp [线上访问地址](http://shinygang.coding.me/)
+# 基于vue.js 的小型代码空间
 
-## 注意：当前项目代码已经升级到2.0，均采用vue-cli搭建的程序，非vue-cli的版本请看分支：not-vue-cli
- * master分支采用vue-cli构建的2.0版本。
- * ssr分支采用服务端渲染
- * 1.x代码请看1.x分支。
- * not-vue-cli则是没有采用vue-cli搭建的原始版本
-
-###安装
+### 安装
 
 项目地址：（`git clone`）
 
 ```shell
-git clone https://github.com/shinygang/Vue-cnodejs.git
+git clone http://192.168.2.133:10101/lfh/cargo-magic-manager-view.git
 ```
 
 通过`npm`安装本地服务第三方依赖模块(需要已安装[Node.js](https://nodejs.org/))
@@ -20,7 +14,7 @@ git clone https://github.com/shinygang/Vue-cnodejs.git
 npm install
 ```
 
-启动服务(http://localhost:8020)
+启动服务(http://localhost:8011)
 
 ```
 npm run dev
@@ -31,9 +25,9 @@ npm run dev
 npm run build
 ```
 
-###开发
+### 开发
 
-###目录结构
+### 目录结构
 <pre>
 .
 ├── README.md           
