@@ -61,6 +61,9 @@
             },
             getTabInfo() {
                 return this.$store.getters.tabInfo;
+            },
+            trunkTriggerList() {
+                return this.$store.getters.trunkTrigger.list;
             }
         },
         data() {
@@ -171,6 +174,12 @@
                 this.getTopics();
                 // 隐藏导航栏
                 this.$refs.head.show = false;
+            },
+            'trunkTriggerList' (flag) {
+                if (flag) {
+                    console.info(111);
+                    this.getTopics();
+                }
             }
         },
         components: {

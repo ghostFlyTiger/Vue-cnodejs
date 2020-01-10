@@ -140,9 +140,9 @@
                     dataType: 'json',
                     success: (res) => {
                         if (res.success) {
-                            $.alert('更新成功!');
+                            this.$alert('更新成功!');
                         } else {
-                            $.alert('更新失败,请重试!');
+                            this.$alert('更新失败,请重试!');
                         }
                     },
                     error: (res) => {

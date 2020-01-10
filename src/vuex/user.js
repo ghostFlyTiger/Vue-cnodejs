@@ -55,6 +55,10 @@ const userStore = new Vuex.Store({
             str(tab = 'all') {
                 return (this.v[tab] || this.v.other).text;
             }
+        },
+        trunk: {
+            list: 0,
+            topic: {}
         }
     },
     getters: {
@@ -79,16 +83,25 @@ const userStore = new Vuex.Store({
                 }
                 return isClass ? styleClass : text;
             };
+        },
+        trunkTrigger(state) {
+            return state.trunk;
         }
     },
     mutations: {
         setUserInfo(state, userInfo) {
             state.userInfo = userInfo;
+        },
+        setTrunk(state, {trigger, data}) {
+            state.trunk[trigger] = data;
         }
     },
     actions: {
         setUserInfo({commit}, user) {
             commit('setUserInfo', user);
+        },
+        setTrunk({commit}, data) {
+            commit('setTrunk', data);
         }
     }
 });

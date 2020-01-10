@@ -7,6 +7,7 @@ import filters from './filters';
 import routes from './topicRouter';
 // import routes from './routers';
 import Alert from './libs/alert';
+import SimpleMs from './libs/socketListener';
 import store from './vuex/user';
 import FastClick from 'fastclick';
 
@@ -14,6 +15,7 @@ import {storageManage} from './libs/utils';
 
 Vue.use(VueRouter);
 Vue.use(Alert);
+Vue.use(SimpleMs);
 
 $.ajaxSettings.crossDomain = true;
 
