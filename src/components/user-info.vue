@@ -6,7 +6,7 @@
         </ul>
         <!-- 已登录 -->
         <div class="login-yes" v-if="userInfo.userName" @click="goUser">
-            <div class="avertar"><img v-if="userInfo.avatar_url" :src="userInfo.avatar_url"></div>
+            <div class="avertar"><img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl"></div>
             <div class="info">
                 <p v-if="userInfo.userName" v-text="userInfo.userName"></p>
             </div>
@@ -17,7 +17,7 @@
     import {
         mapGetters
     } from 'vuex';
-    // import userStore from '../vuex/user';
+
     export default {
         replace: true,
         computed: {
@@ -36,10 +36,8 @@
             },
             goUser() {
                 this.$router.push({
-                    name: 'user',
-                    params: {
-                        userName: this.userInfo.userName
-                    }
+                    name: 'userList',
+                    params: this.userInfo
                 });
             }
         }

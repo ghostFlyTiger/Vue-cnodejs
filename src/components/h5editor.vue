@@ -13,6 +13,7 @@
     </div>
 </template>
 <script>
+    /* 这里实际是引入mavon-editor模块中的mavonEditor组件 */
     import {mavonEditor} from 'mavon-editor';
     require('../assets/css/css/index.css');
     export default {
@@ -104,6 +105,7 @@
         height:100%;
         .mavon-editor {
             height: 100%;
+            /* 调整mavon-editor的层级,避免层级太高,导致遮罩层失效 */
             z-index:2;
         }
     }

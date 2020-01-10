@@ -6,14 +6,14 @@
         <div class="add-container">
             <div class="line">选择分类：
                 <select class="add-tab" v-model="topic.tab">
-                    <option v-for="(val,key) in topicTabs.t" :value="key" v-text="val"></option>
+                    <option v-for="tabi in chooseTabs" :value="tabi[0]" v-text="tabi[1].text"></option>
                 </select>
                 <a class="add-btn" @click="addTopic">发布</a>
             </div>
             <div class="line">
                 <input class="add-title" v-model="topic.title"
                         type="text" :class="{'err':err==='title'}"
-                        placeholder="标题，字数10字以上" max-length="100"/>
+                        placeholder="标题，字数5字以上,最多100字" max-length="100"/>
             </div>
             <h5editor style="height:580px;" :class="{'err':err==='content'}" placeholder="请输入内容" :value="mdValue"></h5editor>
         </div>
@@ -39,18 +39,21 @@
                     content: ''
                 },
                 err: '',
-                authorTxt: ' \n-- # *I‘m Chivenh*',
+                authorTxt: ' \n-- \n# *I‘m Chivenh*',
                 mdValue: {}
             };
         },
         mounted() {
-            console.info(this.topicTabs);
+            // a
         },
         computed: {
             ...mapGetters({
                 userInfo: 'getUserInfo',
                 topicTabs: 'getTabs'
-            })
+            }),
+            chooseTabs() {
+                return Object.entries(this.topicTabs.v).filter(t => t[1].c);
+            }
         },
         methods: {
             addTopic() {

@@ -9,7 +9,6 @@
 <script>
     import $ from 'webpack-zepto';
     const utils = require('../libs/utils');
-    const markdown = require('markdown').markdown;
     import {
         mapGetters
     } from 'vuex';
@@ -46,7 +45,7 @@
                     this.content = content;
                     let time = new Date();
                     let linkUsers = utils.linkUsers(this.content);
-                    let htmlText = markdown.toHTML(linkUsers) + this.author_txt;
+                    let htmlText = linkUsers;
                     let replyContent = $('<div class="markdown-text"></div>').append(htmlText)[0].outerHTML;
                     let postData = {
                         accesstoken: this.userInfo.token,

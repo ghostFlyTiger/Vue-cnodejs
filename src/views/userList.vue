@@ -1,39 +1,40 @@
 <template>
     <div>
         <!-- 全局header -->
-        <nv-head :page-type="getTitleStr(searchKey.tab)"
-                ref="head"
-                :fix-head="true"
-                :need-add="true">
+        <nv-head page-type="我的主题"
+                 ref="head"
+                 :fix-head="true"
+                 :need-add="true">
+                {{userInfo.userName}}
         </nv-head>
 
         <section id="page">
             <!-- 首页列表 -->
             <ul class="posts-list">
                 <li v-for="item in topics" :key="item.id">
-                    <router-link :to="{name:'topic',params:{id:item.id}}">
-                    <h3 v-text="item.title"
+                    <router-link :to="{name:'editTopic',params:{id:item.id}}">
+                        <h3 v-text="item.title"
                             :class="getTabInfo(item.tab, item.good, item.top, true)"
                             :title="getTabInfo(item.tab, item.good, item.top, false)">
-                    </h3>
-                    <div class="content" v-show="item.topicAuthor">
-                        <img class="avatar" :src="item.topicAuthor.avatarUrl" />
-                        <div class="info">
-                            <p>
+                        </h3>
+                        <div class="content" v-show="item.topicAuthor">
+                            <img class="avatar" :src="item.topicAuthor.avatarUrl" />
+                            <div class="info">
+                                <p>
                                 <span class="name">
                                     {{item.topicAuthor.userName}}
                                 </span>
-                                <span class="status" v-if="item.replyCount > 0">
+                                    <span class="status" v-if="item.replyCount > 0">
                                     <b>{{item.replyCount}}</b>
                                     /{{item.visitCount}}
                                 </span>
-                            </p>
-                            <p>
-                                <time>{{item.createAt | getLastTimeStr(true)}}</time>
-                                <time>{{item.lastReplyAt | getLastTimeStr(true)}}</time>
-                            </p>
+                                </p>
+                                <p>
+                                    <time>{{item.createAt | getLastTimeStr(true)}}</time>
+                                    <time>{{item.lastReplyAt | getLastTimeStr(true)}}</time>
+                                </p>
+                            </div>
                         </div>
-                    </div>
                     </router-link>
                 </li>
             </ul>
@@ -47,6 +48,7 @@
     import utils from '../libs/utils.js';
     import nvHead from '../components/header.vue';
     import nvTop from '../components/backtotop.vue';
+    import userInfo from '../components/user-info.vue';
 
     export default {
         filters: {
@@ -61,6 +63,9 @@
             },
             getTabInfo() {
                 return this.$store.getters.tabInfo;
+            },
+            userInfo() {
+                return this.$store.getters.getUserInfo;
             }
         },
         data() {
@@ -84,10 +89,10 @@
 
             // 如果从详情返回并且之前存有对应的查询条件和参数
             // 则直接渲染之前的数据
-            if (utils.storageManage.get("searchKey") && utils.storageManage.get("tab") === this.searchKey.tab) {
-                this.topics = utils.storageManage.getJson("topics");
-                this.searchKey = utils.storageManage.getJson("searchKey");
-                this.$nextTick(() => $(window).scrollTop(utils.storageManage.get("scrollTop")));
+            if (utils.storageManage.get("mine_topics") && utils.storageManage.get("mine_key") === this.userInfo.userId) {
+                this.topics = utils.storageManage.getJson("mine_topics");
+                this.searchKey = utils.storageManage.getJson("mine_searchKey");
+                this.$nextTick(() => $(window).scrollTop(utils.storageManage.get("mine_scrollTop")));
             } else {
                 this.getTopics();
             }
@@ -97,26 +102,26 @@
         beforeRouteLeave(to, from, next) {
             // 如果跳转到详情页面，则记录关键数据
             // 方便从详情页面返回到该页面的时候继续加载之前位置的数据
-            if (to.name === 'topic') {
+            if (to.name === 'topicEdit') {
                 // 当前滚动条位置
-                utils.storageManage.push("scrollTop", $(window).scrollTop());
+                utils.storageManage.push("mine_scrollTop", $(window).scrollTop());
                 // 当前页面主题数据
-                utils.storageManage.jsonPush("topics", this.topics);
+                utils.storageManage.jsonPush("mine_topics", this.topics);
                 // 查询参数
-                utils.storageManage.jsonPush("searchKey", this.searchKey);
+                utils.storageManage.jsonPush("mine_searchKey", this.searchKey);
                 // 当前tab
-                utils.storageManage.push("tab", from.query.tab || 'all');
+                utils.storageManage.push("mine_tab", from.query.tab || 'all');
             }
             $(window).off('scroll');
             next();
         },
-        beforeRouteEnter(to, from, next) {
-            if (from.name !== 'topic') {
+        beforeRouteEnter(to, _from, next) {
+            if (_from.name !== 'topicEdit') {
                 // 页面切换移除之前记录的数据集
-                if (utils.storageManage.get("tab")) {
-                    utils.storageManage.remove('topics');
-                    utils.storageManage.remove('searchKey');
-                    utils.storageManage.remove('tab');
+                if (utils.storageManage.get("mine_tab")) {
+                    utils.storageManage.remove('mine_topics');
+                    utils.storageManage.remove('mine_searchKey');
+                    utils.storageManage.remove('mine_tab');
                 }
             }
             next();
@@ -129,7 +134,7 @@
             // 获取主题数据
             getTopics() {
                 let params = $.param(this.searchKey);
-                $.post(this.parent + 'topic/getAllByTabInPg?' + params, (d) => {
+                $.post(this.parent + 'topic/getAllByAuthorInPg?' + params, this.userInfo, (d) => {
                     this.scroll = true;
                     if (d && d.data) {
                         d.data.forEach(this.mergeTopics);
@@ -175,7 +180,13 @@
         },
         components: {
             nvHead,
-            nvTop
+            nvTop,
+            userInfo
         }
     };
 </script>
+<style lang="scss">
+    .user-info-me {
+        margin-top:30px;
+    }
+</style>

@@ -7,7 +7,7 @@
             <div class="nv-toolbar">
                 <div class="toolbar-nav" @click="openMenu" v-if="fixHead">
                 </div>
-                <span v-text="pageType"></span>
+                <span><slot></slot> {{pageType}}</span>
                 <i class="num" v-if="messageCount > 0"> {{messageCount}}</i>
                 <router-link to="/add">
                     <i v-if="needAdd" v-show="!messageCount || messageCount <= 0" class="iconfont add-icon">&#xe60f;</i>
