@@ -108,9 +108,11 @@
         },
         computed: {
             ...mapGetters({
-                userInfo: 'getUserInfo',
-                getTabInfo: 'tabInfo'
-            })
+                userInfo: 'getUserInfo'
+            }),
+            getTabInfo() {
+                return this.TABS_HANDLER.tabInfo();
+            }
         },
         mounted() {
             // 隐藏左侧展开菜单

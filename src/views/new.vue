@@ -48,11 +48,10 @@
         },
         computed: {
             ...mapGetters({
-                userInfo: 'getUserInfo',
-                topicTabs: 'getTabs'
+                userInfo: 'getUserInfo'
             }),
             chooseTabs() {
-                return Object.entries(this.topicTabs.v).filter(t => t[1].c);
+                return Object.entries(this.TABS_HANDLER.getTabs().v).filter(t => t[1].c);
             }
         },
         methods: {

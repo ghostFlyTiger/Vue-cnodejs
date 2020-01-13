@@ -16,46 +16,6 @@ const userStore = new Vuex.Store({
         urls: {
             parent: 'http://localhost:8057/'
         },
-        tabs: {
-            v: {
-                share: {
-                    text: '分享',
-                    c: true,
-                    styleClass: 'share'
-                },
-                ask: {
-                    text: '问答',
-                    c: true,
-                    styleClass: 'ask'
-                },
-                tip: {
-                    text: '小知识',
-                    c: true,
-                    styleClass: 'job'
-                },
-                other: {
-                    text: '其它',
-                    c: true,
-                    styleClass: 'default'
-                },
-                good: {
-                    text: '精华',
-                    s: true,
-                    styleClass: 'good'
-                },
-                top: {
-                    text: '置顶',
-                    s: true,
-                    styleClass: 'top'
-                },
-                all: {
-                    text: '全部'
-                }
-            },
-            str(tab = 'all') {
-                return (this.v[tab] || this.v.other).text;
-            }
-        },
         trunk: {
             list: 0,
             topic: {}
@@ -65,24 +25,8 @@ const userStore = new Vuex.Store({
         getUserInfo(state) {
             return state.userInfo;
         },
-        getTabs(state) {
-            return state.tabs;
-        },
         getParent(state) {
             return state.urls.parent;
-        },
-        tabInfo(state) {
-            return function (tab, good, top, isClass) {
-                let text, styleClass;
-                if (top) {
-                    ({text, styleClass} = state.tabs.v.top);
-                } else if (good) {
-                    ({text, styleClass} = state.tabs.v.good);
-                } else {
-                    ({text, styleClass} = ['share', 'ask', 'tip'].includes(tab) ? state.tabs.v[tab] : state.tabs.v.other);
-                }
-                return isClass ? styleClass : text;
-            };
         },
         trunkTrigger(state) {
             return state.trunk;

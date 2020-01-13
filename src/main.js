@@ -13,9 +13,13 @@ import FastClick from 'fastclick';
 
 import {storageManage} from './libs/utils';
 
+import TABS_HANDLER from './tabsHandler';
+
 Vue.use(VueRouter);
 Vue.use(Alert);
 Vue.use(SimpleMs);
+
+Vue.use(TABS_HANDLER);
 
 $.ajaxSettings.crossDomain = true;
 

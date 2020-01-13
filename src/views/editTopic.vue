@@ -104,9 +104,11 @@
         computed: {
             ...mapGetters({
                 userInfo: 'getUserInfo',
-                getTabInfo: 'tabInfo',
                 parent: 'getParent'
             }),
+            getTabInfo() {
+                return this.TABS_HANDLER.tabInfo();
+            },
             tabType() {
                 return this.topic ? this.getTabInfo(this.topic.tab) : '主题';
             }

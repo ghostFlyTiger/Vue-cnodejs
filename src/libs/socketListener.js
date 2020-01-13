@@ -3,17 +3,25 @@
  * socketListener
  */
 import Vue from 'vue';
-/* 打开ws链接 */
 import store from "../vuex/user";
 
 class Ms {
+    __WS_URL="ws://localhost:8057/simpleMs";
+    _retry=10;
+    retry=this._retry;
     simpleMs;
     constructor() {
         this.init();
     }
+    _reopen(){
+        setTimeout(()=>{
+           this.simpleMs= new WebSocket(this.__WS_URL);
+        },1000*this.retry++);
+    }
     init(){
-
-        let simpleMs = new WebSocket("ws://localhost:8057/simpleMs");
+        /* 打开ws链接 */
+        let $this=this;
+        let simpleMs = new WebSocket(this.__WS_URL);
 
         simpleMs.onopen=function (event) {
             simpleMs.send(JSON.stringify({
@@ -24,6 +32,7 @@ class Ms {
                     from:'main'
                 }
             }));
+            $this.retry=$this._retry;
         };
 
         simpleMs.onmessage=function (event) {
@@ -37,6 +46,11 @@ class Ms {
 
         simpleMs.onclose=function (event) {
             console.info(event);
+            $this._reopen();
+        };
+
+        simpleMs.onerror=function (event) {
+            $this._reopen();
         };
 
         this.simpleMs=simpleMs;

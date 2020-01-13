@@ -60,7 +60,7 @@
                 return this.$store.getters.getParent;
             },
             getTabInfo() {
-                return this.$store.getters.tabInfo;
+                return this.TABS_HANDLER.tabInfo();
             },
             trunkTriggerList() {
                 return this.$store.getters.trunkTrigger.list;
@@ -127,7 +127,7 @@
         methods: {
             // 获取title文字
             getTitleStr(tab) {
-                return this.$store.state.tabs.str(tab);
+                return this.TABS_HANDLER.tabs.str(tab);
             },
             // 获取主题数据
             getTopics() {
@@ -177,7 +177,6 @@
             },
             'trunkTriggerList' (flag) {
                 if (flag) {
-                    console.info(111);
                     this.getTopics();
                 }
             }
