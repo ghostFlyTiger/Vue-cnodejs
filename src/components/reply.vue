@@ -22,7 +22,6 @@
         data() {
             return {
                 hasErr: false,
-                authorTxt: ' # *I‘m Chivenh*',
                 replyValue: {}
             };
         },
@@ -49,7 +48,7 @@
                     let replyContent = $('<div class="markdown-text"></div>').append(htmlText)[0].outerHTML;
                     let postData = {
                         accesstoken: this.userInfo.token,
-                        content: this.content + this.author_txt
+                        content: this.content
                     };
 
                     if (this.replyId) {

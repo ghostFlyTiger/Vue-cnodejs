@@ -39,7 +39,6 @@
                     content: ''
                 },
                 err: '',
-                authorTxt: ' \n-- \n# *I‘m Chivenh*',
                 mdValue: {}
             };
         },
@@ -73,7 +72,7 @@
                 let postData = {
                     ...this.topic,
                     topicAuthor: this.userInfo,
-                    content: this.topic.content + this.authorTxt
+                    content: this.topic.content
                 };
 
                 $.ajax({

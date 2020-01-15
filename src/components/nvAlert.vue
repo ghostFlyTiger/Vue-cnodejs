@@ -21,6 +21,7 @@
         z-index: 9999;
         background-color: rgba(0, 0, 0, 0);
         text-align: center;
+
         .wx_alert_inner {
             display: inline-block;
             margin: 0 auto;

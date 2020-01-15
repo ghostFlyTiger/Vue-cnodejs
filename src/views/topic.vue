@@ -14,7 +14,7 @@
             <section class="author-info">
                 <img class="avatar" :src="topic.topicAuthor.avatarUrl" />
                 <div class="col">
-                    <span>{{topic.topicAuthor.userName}}</span>
+                    <span>{{topic.topicAuthor.userName}} <i v-text.once="topic.topicAuthor.tip"></i></span>
                     <time>
                         发布于:{{topic.createAt | getLastTimeStr(true)}}
                     </time>

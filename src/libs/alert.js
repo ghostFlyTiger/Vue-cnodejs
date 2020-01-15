@@ -7,19 +7,16 @@ import $ from 'webpack-zepto';
 export default {
     install() {
         let timer = null;
+        let $alert = $('<div class="week-alert alert-hide" id="alertWeek"></div>');
+        let body = $('body');
+        body.append($alert);
         Vue.prototype.$alert = (msg) => {
-            let body = $('body');
-            if (body && body.length) {
-                $('#alertWeek').remove();
-                let $alert = $('<div class="week-alert" id="alertWeek"></div>');
-                body.append($alert);
-                $alert.html(msg);
-                $alert.addClass('alert-show');
-                clearTimeout(timer);
-                timer = setTimeout(() => {
-                    $alert.remove();
-                }, 2000);
-            }
+            $alert.html(msg);
+            $alert.removeClass("alert-hide").addClass('alert-show');
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                $alert.removeClass("alert-show").addClass("alert-hide");
+            }, 2000);
         };
     }
 };

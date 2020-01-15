@@ -15,6 +15,8 @@ import {storageManage} from './libs/utils';
 
 import TABS_HANDLER from './tabsHandler';
 
+import EventHandlers from   './libs/eventHandlers';
+
 Vue.use(VueRouter);
 Vue.use(Alert);
 Vue.use(SimpleMs);
@@ -36,6 +38,7 @@ FastClick.attach(document.body);
 // 处理刷新的时候vuex被清空但是用户已经登录的情况
 if (storageManage.get("user")) {
     store.dispatch('setUserInfo', storageManage.getJson("user"));
+    store.dispatch('setUserGroup',storageManage.getJson('userGroup'));
 }
 
 // 登录中间验证，页面需要登录而没有登录的情况直接跳转登录
@@ -68,3 +71,5 @@ new Vue({
     router,
     store
 }).$mount('#app');
+
+EventHandlers(Vue.prototype.$eventsMs,['scroll']);

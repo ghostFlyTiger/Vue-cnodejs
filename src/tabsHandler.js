@@ -46,7 +46,7 @@ export let TABS = {
         return this.tabs;
     },
     tabInfo() {
-        let tabs = this;
+        let tabs = this.tabs;
 
         return function (tab, good, top, isClass) {
             let text, styleClass;

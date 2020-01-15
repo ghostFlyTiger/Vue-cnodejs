@@ -244,8 +244,12 @@ $font-tag: 10px;
     padding: 9px 20px;
     font-size: 15px;
     z-index: 999;
+    display:block;
     &.alert-show {
         animation: show 2s;
+    }
+    &.alert-hide {
+        display:none;
     }
     @keyframes show {
         0% {

@@ -28,8 +28,11 @@
                 </div>
             </section>
 
-            <h5editor style="height:580px;" :content="topic.content"></h5editor>
-            <a class="confirm-button" @click="updateTopic">确定更新</a>
+            <h5editor style="height:580px;" :content="topic.content" :value="topicValue"></h5editor>
+            <div class="confirm-button">
+                <a class="del-topic" @click="delTopic">删除主题</a>
+                <a class="save-topic" @click="updateTopic">更新主题</a>
+            </div>
             <h3 class="topic-reply">
                 <strong>{{topic.replyCount}}</strong> 回复
             </h3>
@@ -43,7 +46,7 @@
                             </router-link>
                             <div class="info">
                                 <span class="cl">
-                                    <span class="name" v-text="item.topicAuthor.userName"></span>
+                                    <span class="name">{{item.topicAuthor.userName}} <i v-text="item.topicAuthor.tip"></i></span>
                                     <span class="name mt10">
                                         <span></span>
                                         发布于:{{item.createAt | getLastTimeStr(true)}}</span>
@@ -66,7 +69,7 @@
                                 :reply-to="item.author.userName"
                                 :show.sync="curReplyId"
                                 @close="hideItemReply"
-                                v-if="userInfo.userId && curReplyId === item.id"></nv-reply>
+                                v-if="userInfo.userGroup && curReplyId === item.id"></nv-reply>
                     </li>
                 </ul>
             </section>
@@ -98,7 +101,8 @@
                 topic: {}, // 主题
                 noData: false,
                 topicId: '',
-                curReplyId: ''
+                curReplyId: '',
+                topicValue: {}
             };
         },
         computed: {
@@ -133,16 +137,38 @@
             });
         },
         methods: {
+            delTopic() {
+                $.ajax({
+                    type: 'POST',
+                    url: this.parent + 'topic/delTopic',
+                    data: {
+                        id: this.topic.id
+                    },
+                    success: res => {
+                        if (res.success) {
+                            this.$alert('成功删除!');
+                            this.$router.push({
+                                name: 'userList'
+                            });
+                        }
+                    }
+                });
+            },
             updateTopic() {
                 $.ajax({
                     type: 'POST',
                     contentType: 'application/json;charset=UTF-8',
                     url: this.parent + 'topic/updateTopic',
-                    data: JSON.stringify(this.topic),
+                    data: JSON.stringify(Object.assign(this.topic, {
+                        content: this.topicValue.value
+                    })),
                     dataType: 'json',
                     success: (res) => {
                         if (res.success) {
                             this.$alert('更新成功!');
+                            this.$router.push({
+                                name: 'userList'
+                            });
                         } else {
                             this.$alert('更新失败,请重试!');
                         }
@@ -219,17 +245,31 @@
 </script>
 <style lang="scss">
     .confirm-button {
-        display: inline-block;
         width: 100%;
         height: 42px;
         margin: 15px 0;
         line-height: 42px;
         color: #fff;
         font-size: 16px;
-        background-color: #4fc08d;
-        border: none;
-        border-bottom: 2px solid #3aa373;
         text-align: center;
         vertical-align: middle;
+        box-sizing: border-box;
+
+        .save-topic,.del-topic{
+            border: none;
+            width: 40%;
+            display: inline-block;
+            height: 100%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        .save-topic {
+            background-color: #4fc08d;
+            border-bottom: 2px solid #3aa373;
+        }
+        .del-topic {
+            background-color: #c0575a;
+            border-bottom: 2px solid #a31502;
+        }
     }
 </style>
