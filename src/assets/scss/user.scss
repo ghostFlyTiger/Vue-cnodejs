@@ -40,6 +40,9 @@
     background-size: 6px 10px;
     overflow: hidden;
     position: relative;
+    &.user-link{
+      cursor: pointer;
+    }
     .avertar {
         width: 40px;
         height: 40px;
@@ -129,7 +132,7 @@
         width: 50%;
         padding: $gap*2.5 0;
         float: left;
-        font-size: 16;
+        font-size: 16px;
         text-align: center;
         font-weight: bold;
     }

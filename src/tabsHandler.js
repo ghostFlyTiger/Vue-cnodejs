@@ -17,7 +17,7 @@ export let TABS = {
             tip: {
                 text: '小知识',
                 c: true,
-                styleClass: 'job'
+                styleClass: 'tip'
             },
             other: {
                 text: '其它',

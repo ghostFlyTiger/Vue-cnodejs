@@ -30,7 +30,7 @@
                                 </span>
                                 </p>
                                 <p>
-                                    <time>{{item.createAt | getLastTimeStr(true)}}</time>
+                                    <time>发布于 : {{item.createAt | getLastTimeStr()}}</time>
                                     <time>{{item.lastReplyAt | getLastTimeStr(true)}}</time>
                                 </p>
                             </div>

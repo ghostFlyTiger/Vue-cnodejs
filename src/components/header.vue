@@ -42,16 +42,40 @@ export default {
             show: false
         };
     },
+    computed: {
+        toolbarNavOpenMenu() {
+            return this.$store.getters.eventTrigger.toolbarNavOpenMenu;
+        }
+    },
     methods: {
         openMenu() {
-            // $('html, body, #page').addClass('scroll-hide');
-            $('body').css('overflow', 'hidden');
             this.show = !this.show;
+            /* 发送远程同步socket信息 */
+            this.$eventsMs.sendMsg({
+                id: new Date().getTime(),
+                event: 'custom_toolbarNav',
+                data: 1
+            });
         },
         showMenus() {
             this.show = !this.show;
-            $('body').css('overflow', 'auto');
-            // $('html, body, #page').removeClass('scroll-hide');
+            /* 发送远程同步socket信息 */
+            this.$eventsMs.sendMsg({
+                id: new Date().getTime(),
+                event: 'custom_toolbarNav',
+                data: -1
+            });
+        }
+    },
+    watch: {
+        show: function (show) {
+            $('body').css('overflow', show ? 'hidden' : 'auto');
+        },
+        toolbarNavOpenMenu: function (showFlag) {
+            console.info(showFlag, !!showFlag);
+            if (typeof showFlag === 'number' && showFlag !== 0) {
+                this.show = showFlag > 0;
+            }
         }
     },
     components: {

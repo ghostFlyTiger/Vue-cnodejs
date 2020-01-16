@@ -32,6 +32,7 @@
             <div class="confirm-button">
                 <a class="del-topic" @click="delTopic">删除主题</a>
                 <a class="save-topic" @click="updateTopic">更新主题</a>
+                <a class="back-topicList" @click="backTopicList">返回列表</a>
             </div>
             <h3 class="topic-reply">
                 <strong>{{topic.replyCount}}</strong> 回复
@@ -137,6 +138,11 @@
             });
         },
         methods: {
+            backTopicList() {
+                this.$router.push({
+                    name: 'userList'
+                });
+            },
             delTopic() {
                 $.ajax({
                     type: 'POST',
@@ -147,7 +153,7 @@
                     success: res => {
                         if (res.success) {
                             this.$alert('成功删除!');
-                            this.$router.push({
+                            this.$router.replace({
                                 name: 'userList'
                             });
                         }
@@ -243,7 +249,7 @@
         }
     };
 </script>
-<style lang="scss">
+<style lang="scss" type="text/scss">
     .confirm-button {
         width: 100%;
         height: 42px;
@@ -254,22 +260,38 @@
         text-align: center;
         vertical-align: middle;
         box-sizing: border-box;
+        display: flex;// 标识容器为flex容器
+        flex-direction: row;
 
-        .save-topic,.del-topic{
+        /* 占位字义,只用来@extend*/
+        %topic-handler-btn {
             border: none;
-            width: 40%;
             display: inline-block;
             height: 100%;
             margin: 0;
             box-sizing: border-box;
+            flex: auto; // 自动均分填充
+            cursor: pointer;
+        }
+
+         /* 定义混合器,参数化定义,以实现各处自定义*/
+        @mixin topic-handler-btn-color($color, $border) {
+            @extend %topic-handler-btn;
+            transition: background-color 0.3s linear;
+            background-color: $color;
+            border-bottom: 2px solid $border;
+            &:hover{
+                background-color: $border;
+            }
         }
         .save-topic {
-            background-color: #4fc08d;
-            border-bottom: 2px solid #3aa373;
+            @include topic-handler-btn-color(#4fc08d, #3aa373);
         }
         .del-topic {
-            background-color: #c0575a;
-            border-bottom: 2px solid #a31502;
+            @include topic-handler-btn-color(#a33a31, #a32619);
+        }
+        .back-topicList {
+            @include topic-handler-btn-color(#e4a5a2, #9e8686);
         }
     }
 </style>

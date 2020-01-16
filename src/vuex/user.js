@@ -39,7 +39,11 @@ const userStore = new Vuex.Store({
         trunk: {
             list: 0,
             topic: 0
-        }
+        },
+        events: {
+            toolbarNavOpenMenu: 0
+        },
+        follow: false
     },
     getters: {
         getUserInfo(state) {
@@ -53,6 +57,12 @@ const userStore = new Vuex.Store({
         },
         trunkTrigger(state) {
             return state.trunk;
+        },
+        eventTrigger(state) {
+            return state.events;
+        },
+        getFollow(state) {
+            return state.follow;
         }
     },
     /**
@@ -69,8 +79,21 @@ const userStore = new Vuex.Store({
                 state.trunk[trigger] = 0;
             });
         },
+        triggerEvents(state, {event, data}) {
+            if (!state.follow) {
+                return;// 非追随不同步
+            }
+            state.events[event] = data;
+            /* 还原参数设置,以触发下一次事件响应 */
+            Vue.nextTick(function () {
+                state.events[event] = 0;
+            });
+        },
         setUserGroup(state, userGroup) {
             state.userGroup = userGroup;
+        },
+        setFollow(state, follow) {
+            state.follow = follow;
         }
     },
     /**
@@ -83,8 +106,14 @@ const userStore = new Vuex.Store({
         setTrunk({commit}, data) {
             commit('setTrunk', data);
         },
+        setEvent({commit}, data) {
+            commit('triggerEvents', data);
+        },
         setUserGroup({commit}, userGroup) {
             commit('setUserGroup', userGroup);
+        },
+        setFollow({commit}, follow) {
+            commit('setFollow', follow);
         }
     }
 });

@@ -43,8 +43,8 @@
             };
         },
         mounted() {
-            // a
         },
+        // a
         computed: {
             ...mapGetters({
                 userInfo: 'getUserInfo'
@@ -90,7 +90,7 @@
                     },
                     error: (res) => {
                         let error = JSON.parse(res.responseText);
-                        this.$alert(error.error_msg);
+                        this.$alert(error.errorMsg);
                         return false;
                     }
                 });
@@ -116,17 +116,21 @@
                 background-color: #80bd01;
                 padding: 5px 15px;
                 border-radius: 5px;
+                cursor: pointer;
             }
             .add-tab {
                 display: inline-block;
                 width: calc(100% - 140px);
                 min-width: 50%;
+                height:25px;
+                border:none;
+                border:1px solid #73eeb3;
+                border-radius: 3px;
                 font-size: 16px;
                 background: transparent;
                  :after {
                     content: 'xe60e';
                 }
-                ;
             }
             .add-title {
                 font-size: 16px;

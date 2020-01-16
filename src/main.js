@@ -23,7 +23,7 @@ Vue.use(SimpleMs);
 
 Vue.use(TABS_HANDLER);
 
-$.ajaxSettings.crossDomain = true;
+$.ajaxSettings.crossDomain = true;// 跨域
 
 // 实例化Vue的filter
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
@@ -39,6 +39,10 @@ FastClick.attach(document.body);
 if (storageManage.get("user")) {
     store.dispatch('setUserInfo', storageManage.getJson("user"));
     store.dispatch('setUserGroup',storageManage.getJson('userGroup'));
+}
+
+if(storageManage.get("state_follow") !== undefined){
+    store.dispatch('setFollow', storageManage.get("state_follow"));
 }
 
 // 登录中间验证，页面需要登录而没有登录的情况直接跳转登录
@@ -63,7 +67,11 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
-router.afterEach(() => {
+router.afterEach((to) => {
+    if (to.query && to.query.follow && to.query.follow !== store.state.follow) {
+        store.dispatch('setFollow', to.query.follow);
+        storageManage.push('state_follow', to.query.follow) ;
+    }
     store.state.loading.show = false;
 });
 
@@ -72,4 +80,6 @@ new Vue({
     store
 }).$mount('#app');
 
-EventHandlers(Vue.prototype.$eventsMs,['scroll']);
+/* 事件响应机制 */
+EventHandlers(Vue.prototype.$eventsMs,['scroll','toolbarNavOpenMenu']
+    ,store);

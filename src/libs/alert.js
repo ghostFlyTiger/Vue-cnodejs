@@ -1,11 +1,10 @@
-import Vue from 'vue';
 import $ from 'webpack-zepto';
 
 /**
  * 全局注册弱提示
  */
 export default {
-    install() {
+    install(Vue) {
         let timer = null;
         let $alert = $('<div class="week-alert alert-hide" id="alertWeek"></div>');
         let body = $('body');

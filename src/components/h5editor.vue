@@ -1,7 +1,7 @@
 <!-- mavon-editor 的重新定义,自定义行为控制,及数据回传-->
 <template>
     <div class="h5editor">
-        <mavon-editor class="mavon-editor"
+        <mavon-editor ref="$vmEditor" class="mavon-editor"
                       :subfield="subfield"
                       :defaultOpen="defaultOpen"
                       :toolbarsFlag="toolbarsFlag"
@@ -9,12 +9,15 @@
                       :shortCut="false"
                       v-model="h5Content"
                       :placeholder="placeholder"
+                      @imgAdd="$imgAdd"
         @change="sync"></mavon-editor>
     </div>
 </template>
 <script>
     /* 这里实际是引入mavon-editor模块中的mavonEditor组件 */
     import {mavonEditor} from 'mavon-editor';
+    import $ from 'webpack-zepto';
+
     require('../assets/css/css/index.css');
     export default {
         name: "h5editor",
@@ -35,6 +38,12 @@
                 description: '此对象用作内外数据交互'
             },
             placeholder: String
+        },
+        computed: {
+            parent() {
+                /* 调用$store.getters的计算值 */
+                return this.$store.getters.getParent;
+            }
         },
         data() {
             let data = {
@@ -90,6 +99,34 @@
                 /* 将编辑器的数据通过绑定对象传递到调用方 */
                 this.value.value = value;
                 this.value.render = render;
+            },
+            // 绑定@imgAdd event
+            $imgAdd(pos, $file) {
+                // 第一步.将图片上传到服务器.
+                let $vm = this.$refs.$vmEditor;// 编辑器实例
+                var formdata = new FormData();
+                formdata.append('images', $file);
+                let urlPrefix = this.parent + 'topic/viewImage/';
+                $.ajax({
+                    url: this.parent + 'topic/uploadImages',
+                    type: 'post',
+                    data: formdata,
+                    dataType: 'json',
+                    processData: false, // 使数据不做处理
+                    contentType: false, // 不要设置Content-Type请求头
+                    success: (data) => {
+                        // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
+                        /**
+                         * $vm 指为mavonEditor实例，可以通过如下两种方式获取
+                         * 1. 通过引入对象获取: `import {mavonEditor} from ...` 等方式引入后，`$vm`为`mavonEditor`
+                         * 2. 通过$refs获取: html声明ref : `<mavon-editor ref=md ></mavon-editor>，`$vm`为 `this.$refs.md`
+                         */
+                        let urls = data.data.split(';');
+                        urls.forEach(url => {
+                            $vm.$img2Url(pos, urlPrefix + url);
+                        });
+                    }
+                });
             }
         },
         components: {

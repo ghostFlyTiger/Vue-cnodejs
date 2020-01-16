@@ -5,6 +5,11 @@
 import Vue from 'vue';
 import store from "../vuex/user";
 
+/**
+ * 基本websocket对象管理
+ * @param url -地址
+ * @constructor -
+ */
 function Ms(url) {
     this.__WS_URL=url;
     this._retry=10;
@@ -59,12 +64,10 @@ Ms.prototype= {
         };
 
         simpleMs.onclose=function (event) {
-            console.info(event);
             $this._reopen();
         };
 
         simpleMs.onerror=function (event) {
-            console.info(event);
             $this._reopen();
         };
 
@@ -72,6 +75,11 @@ Ms.prototype= {
     }
 };
 
+/**
+ * 事件websocket总线管理
+ * @param url -地址
+ * @constructor -
+ */
 function EventsMs(url) {
     Ms.call(this,url);
 }

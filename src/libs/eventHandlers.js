@@ -11,7 +11,8 @@ let WindowRect = {
 let eventsTimer = {};
 
 let events = {
-    scroll: function (ms) {
+    /* 滚动事件响应 */
+    scroll: function (ms, store) {
         document.addEventListener("resize", function () {
             [WindowRect.w, WindowRect.h] = [
                 window.screen.width,
@@ -19,6 +20,9 @@ let events = {
             ];
         });
         document.addEventListener("custom_scroll", function (e) {
+            if (!store.state.follow) {
+                return;
+            }
             let detail = e.detail;
             let scrollData = {
                 behavior: 'smooth'
@@ -35,7 +39,7 @@ let events = {
                 window.scrollTo(scrollData);// 触发滚动
                 eventsTimer.scrollRefuse = setTimeout(function () {
                     WindowRect.main = true;
-                }, 50);
+                });
             }
         });
         document.addEventListener("scroll", function (e) {
@@ -54,13 +58,22 @@ let events = {
                         w: window.scrollX / WindowRect.w
                     }
                 });
-            }, 1e3);
+            }, 3e2);
+        });
+    },
+    /* 头部菜单切换事件响应 */
+    toolbarNavOpenMenu: function (ms, store) {
+        document.addEventListener("custom_toolbarNav", function (e) {
+            store.dispatch('setEvent', {
+                event: 'toolbarNavOpenMenu',
+                data: e.detail
+            });
         });
     }
 };
 
-export default function (ms, _events = []) {
+export default function (ms, _events = [], store) {
     _events.forEach(e => {
-        events[e] && events[e](ms);
+        events[e] && events[e](ms, store);
     });
 };
