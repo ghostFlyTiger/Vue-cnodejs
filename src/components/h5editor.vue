@@ -106,7 +106,7 @@
                 let $vm = this.$refs.$vmEditor;// 编辑器实例
                 var formdata = new FormData();
                 formdata.append('images', $file);
-                let urlPrefix = this.parent + 'topic/viewImage/';
+                let urlPrefix = '/topic/viewImage/';// 这里使用代理转发请求,以防止后期后端地址变更后,图片无法正常访问
                 $.ajax({
                     url: this.parent + 'topic/uploadImages',
                     type: 'post',

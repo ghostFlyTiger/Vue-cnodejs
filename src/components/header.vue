@@ -72,7 +72,7 @@ export default {
             $('body').css('overflow', show ? 'hidden' : 'auto');
         },
         toolbarNavOpenMenu: function (showFlag) {
-            console.info(showFlag, !!showFlag);
+            /* 此属性值使用数字,1为开,-1为关,0为初始态 */
             if (typeof showFlag === 'number' && showFlag !== 0) {
                 this.show = showFlag > 0;
             }
